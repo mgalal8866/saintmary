@@ -28,16 +28,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($modelservice->service_attribute as $item)
-                            <tr  >
-                                @foreach ($modelviewservice as $key => $service)
+                        @foreach ($modelviewservice as $key => $service)
+                            @foreach ($modelservice->service_attribute as $item)
+                                <tr>
                                     <td>
                                         @if ($service->service_attribute_id == $item->id)
                                             {{ $service->name }}
                                         @endif
                                     </td>
-                                @endforeach
-                            </tr>
+                                </tr>
+                            @endforeach
                         @endforeach
                     </tbody>
                 </table>
@@ -53,7 +53,7 @@
             @can('service_delete')
                 let deleteButtonTrans =
                     '{{ trans('
-                                                                                global.datatables.delete ') }}'
+                                                            global.datatables.delete ') }}'
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.services.massDestroy') }}",
@@ -68,7 +68,7 @@
                         if (ids.length === 0) {
                             alert(
                                 '{{ trans('
-                                                                                                                                                        global.datatables.zero_selected ') }}'
+                                                                                                                        global.datatables.zero_selected ') }}'
                             )
 
                             return
@@ -76,7 +76,7 @@
 
                         if (confirm(
                                 '{{ trans('
-                                                                                                                                                global.areYouSure ') }}'
+                                                                                                                global.areYouSure ') }}'
                             )) {
                             $.ajax({
                                     headers: {
