@@ -22,9 +22,14 @@ class ViewService extends Model
         'service_id',
         'service_attribute_id',
         'name',
+        'data',
         'created_at',
         'updated_at',
         'deleted_at',
+    ];
+
+    protected $casts=[
+        'data'=>'array'
     ];
 
     protected function serializeDate(DateTimeInterface $date)
@@ -36,6 +41,10 @@ class ViewService extends Model
     {
         return $this->belongsTo(Service::class, 'service_id');
     }
+    // public function ScopeGetlink($link,$colum)
+    // {
+    //     return $this->where(['service_id'=>$link])->first() ;
+    // }
 
     public function service_attribute()
     {

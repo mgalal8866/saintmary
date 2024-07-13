@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Gate;
+use App\Models\Service;
+use App\Models\ViewService;
+use Illuminate\Http\Request;
+use App\Models\ServicesAttribute;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\MassDestroyServiceRequest;
 use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
-use App\Models\Service;
-use App\Models\ServicesAttribute;
-use App\Models\ViewService;
-use Gate;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Requests\MassDestroyServiceRequest;
 
 class ServicesController extends Controller
 {
@@ -38,8 +39,8 @@ class ServicesController extends Controller
     {
         $modelservice = Service::with(['subservies', 'service_attribute'])->findOrFail($id);
 
-        $modelviewservice = ViewService::where('service_id', $id)->whereIn('service_attribute_id', $modelservice->service_attribute->pluck('id')->toarray())->get();
-        // dd( $id,$modelservice->service_attribute->pluck('id')->toarray());
+        $modelviewservice = ViewService::where('service_id', $id)->get();
+
         return view('admin.viewServices.view', compact('modelservice', 'modelviewservice'));
     }
     public function create_parent_service($id)
@@ -52,23 +53,29 @@ class ServicesController extends Controller
     public function save_parent_service(Request $request)
     {
 
-        $data =[];
+        $data = [];
 
         foreach ($request->all() as  $key => $value) {
             if (preg_match('/^input-(\d+)$/', $key, $matches)) {
-                $data[]=['name'=>$value,'service_id'=>$request->service_id,'service_attribute_id'=>$matches[1]];
+                // $data[]=['name'=>$value,'service_id'=>$request->service_id,'service_attribute_id'=>$matches[1]];
+                $data[] = ['id' => $matches[1], 'value' => $value];
             }
         };
-        foreach ($data as $entry) {
-            ViewService::create($entry);
-        }
-   
+        // foreach ($data as $entry) {
+        ViewService::create([
+            'service_id' => $request->service_id,
+            'data'      => $data
+        ]);
+        // }
 
-        return redirect()->route('admin.service.view',['id'=>$request->service_id]);
+
+        return redirect()->route('admin.service.view', ['id' => $request->service_id]);
     }
     public function getSubservice(Request $request)
     {
-        $service = Service::pluck('name', 'id');
+
+        // $service = Service::pluck('name', 'id');
+        $service = ServicesAttribute::where('service_id',$request->service_id)->get(['id','value']);
         return response()->json($service);
     }
     public function store(StoreServiceRequest $request)
