@@ -11,7 +11,7 @@
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ trans('global.list') }}  {{ $modelservice->name }}
+            {{ trans('global.list') }} {{ $modelservice->name }}
         </div>
 
         <div class="card-body">
@@ -36,18 +36,34 @@
                             <tr>
                                 @foreach ($modelservice->service_attribute as $item1)
                                     @if (is_array($service->data))
-                                        @foreach ($service->data as $item)
-                                            @if ($item1->id == $item['id'])
-                                                <td>
-                                                    @if ($item1->type == 'text')
-                                                        {{ $item['value'] }}
-                                                    @elseif ($item1->type == 'link')
-                                                        {{-- {{ dd( $service->getLink($service->service_id)) }} --}}
-                                                        {{ $modelviewservice->where($service->service_id)->first() }}
-                                                    @endif
-                                                </td>
-                                            @endif
-                                        @endforeach
+                                        {{-- @foreach ($service->data as $item) --}}
+                                        {{-- @if ($item1->id == $item['id']) --}}
+                                        {{-- {{    json_encode($service->data)}} --}}
+                                        @php
+                                        $it = json_encode($service->data);
+                                        $data = collect(json_decode($it, true));
+                                        $exists = $data->contains('id', $item1->id);
+                                        $item = $data->firstWhere('id',$item1->id);
+                                        @endphp
+
+                                        @if ($exists)
+                                            <td>
+                                                @if ($item1->type == 'text')
+                                                   {{$it[ $item] }}
+                                                @elseif ($item1->type == 'link')
+                                                      {{ $item['value'] }}
+                                                    {{-- {{ $modelviewservice->where($service->service_id)->first() }} --}}
+                                                @elseif ($item1->type == 'select')
+                                                    {{ $item['value'] }}
+                                                @elseif ($item1->type == 'number')
+                                                      {{ $item['value'] }}
+                                                @elseif ($item1->type == 'image')
+                                                    {{ $item['value'] }}
+                                                @endif
+                                            </td>
+                                        @else
+                                            <td> </td>
+                                        @endif
                                     @else
                                         <td>
                                             {{ htmlspecialchars($service->data, ENT_QUOTES, 'UTF-8') }}
@@ -70,7 +86,7 @@
             @can('service_delete')
                 let deleteButtonTrans =
                     '{{ trans('
-                                                                                                                                                                                                                                                                                                                                                                                            global.datatables.delete ') }}'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        global.datatables.delete ') }}'
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.services.massDestroy') }}",
@@ -85,7 +101,7 @@
                         if (ids.length === 0) {
                             alert(
                                 '{{ trans('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        global.datatables.zero_selected ') }}'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        global.datatables.zero_selected ') }}'
                             )
 
                             return
@@ -93,7 +109,7 @@
 
                         if (confirm(
                                 '{{ trans('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                global.areYouSure ') }}'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                global.areYouSure ') }}'
                             )) {
                             $.ajax({
                                     headers: {
