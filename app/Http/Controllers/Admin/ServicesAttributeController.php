@@ -34,14 +34,18 @@ class ServicesAttributeController extends Controller
 
     public function store(StoreServicesAttributeRequest $request)
     {
-        // $data= [
-        //     'value' => $request->value,
-        //     'type' => $request->type,
-        //     'service_id ' => $request->service_id ,
-        //     'linkservice' => $request->linkservice,
-        //     'selecttype' => json_encode($request->selecttype) ,
-        // ];
-        $servicesAttribute = ServicesAttribute::create($request->all());
+        $data = [
+            'value' => $request->value,
+            'type' => $request->type,
+            'service_id' => $request->service_id,
+            'linkservice' => $request->linkservice,
+        ];
+        // dd($request->selecttype);
+        foreach ($request->selecttype as $index => $item) {
+            $var[] = ['id' => ($index + 1), 'value' => $item];
+        }
+        $data['selecttype'] =  $var;
+        $servicesAttribute = ServicesAttribute::create($data);
 
         return redirect()->route('admin.services-attributes.index');
     }

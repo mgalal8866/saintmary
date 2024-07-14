@@ -34,6 +34,7 @@
                     </a>
                     <ul class="nav nav-treeview"> --}}
 
+                        @can($item->slug)
                         <li class="nav-item">
                             <a href="{{ route('admin.service.view',['id'=>$item->id]) }}" class="nav-link"  >
                                 <p>
@@ -44,6 +45,7 @@
                                 </p>
                             </a>
                         </li>
+                        @endcan
                     {{-- </ul>
                 </li> --}}
 
@@ -136,7 +138,7 @@
                                     </a>
                                 </li>
                             @endcan
-                            @can('view_service_access')
+                            {{-- @can('view_service_access')
                                 <li class="nav-item">
                                     <a href="{{ route("admin.view-services.index") }}" class="nav-link {{ request()->is("admin/view-services") || request()->is("admin/view-services/*") ? "active" : "" }}">
                                         <i class="fa-fw nav-icon fas fa-cogs">
@@ -147,7 +149,7 @@
                                         </p>
                                     </a>
                                 </li>
-                            @endcan
+                            @endcan --}}
                         </ul>
                     </li>
                 @endcan

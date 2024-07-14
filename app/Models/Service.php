@@ -21,6 +21,7 @@ class Service extends Model
 
     protected $fillable = [
         'name',
+        'slug',
         'service_id',
         'subservies_id',
         'mainservice',

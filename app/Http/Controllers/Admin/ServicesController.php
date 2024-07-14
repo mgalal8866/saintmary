@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use Gate;
 use App\Models\Service;
+use App\Models\Permission;
 use App\Models\ViewService;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ServicesAttribute;
 use Illuminate\Support\Facades\DB;
@@ -19,20 +21,15 @@ class ServicesController extends Controller
     public function index()
     {
         abort_if(Gate::denies('service_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
         $services = Service::with(['service', 'subservies'])->get();
-
         return view('admin.services.index', compact('services'));
     }
 
     public function create()
     {
         abort_if(Gate::denies('service_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
         $services = Service::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         $subservies = Service::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-
         return view('admin.services.create', compact('services', 'subservies'));
     }
     public function viewservice($id)
@@ -40,6 +37,7 @@ class ServicesController extends Controller
         $modelservice = Service::with(['subservies', 'service_attribute'])->findOrFail($id);
 
         $modelviewservice = ViewService::where('service_id', $id)->get();
+        abort_if(Gate::denies($modelservice->slug), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return view('admin.viewServices.view', compact('modelservice', 'modelviewservice'));
     }
@@ -52,9 +50,7 @@ class ServicesController extends Controller
     }
     public function save_parent_service(Request $request)
     {
-
         $data = [];
-
         foreach ($request->all() as  $key => $value) {
             if (preg_match('/^input-(\d+)$/', $key, $matches)) {
                 // $data[]=['name'=>$value,'service_id'=>$request->service_id,'service_attribute_id'=>$matches[1]];
@@ -67,20 +63,27 @@ class ServicesController extends Controller
             'data'      => $data
         ]);
         // }
-
-
         return redirect()->route('admin.service.view', ['id' => $request->service_id]);
     }
     public function getSubservice(Request $request)
     {
-
         // $service = Service::pluck('name', 'id');
-        $service = ServicesAttribute::where('service_id',$request->service_id)->get(['id','value']);
+        $service = ServicesAttribute::where('service_id', $request->service_id)->get(['id', 'value']);
         return response()->json($service);
     }
     public function store(StoreServiceRequest $request)
     {
-        $service = Service::create($request->all());
+        $slug = Str::slug($request->name);
+        $originalSlug = $slug;
+        $counter = 1;
+        // Check if the slug already exists and generate a new one if necessary
+        while (Service::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter++;
+        }
+        $data = $request->all();
+        $data['slug'] = $slug;
+        Permission::create(['title' => $data['slug']]);
+        $service = Service::create($data);
 
         return redirect()->route('admin.services.index');
     }

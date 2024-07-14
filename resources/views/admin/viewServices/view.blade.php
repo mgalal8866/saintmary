@@ -11,7 +11,7 @@
     @endcan
     <div class="card">
         <div class="card-header">
-            {{ $modelservice->name }} {{ trans('global.list') }}
+            {{ trans('global.list') }}  {{ $modelservice->name }}
         </div>
 
         <div class="card-body">
@@ -20,11 +20,15 @@
                     <thead>
                         <tr>
 
-                            @foreach ($modelservice->service_attribute as $item)
+                            @forelse ($modelservice->service_attribute as $item)
                                 <th>
                                     {{ $item->value }}
                                 </th>
-                            @endforeach
+                            @empty
+                                No Data
+                            @endforelse
+
+
                         </tr>
                     </thead>
                     <tbody>
@@ -34,14 +38,14 @@
                                     @if (is_array($service->data))
                                         @foreach ($service->data as $item)
                                             @if ($item1->id == $item['id'])
-                                            <td>
-                                                @if ($item1->type == 'text')
-                                                   {{ $item['value'] }}
-                                                @elseif ($item1->type == 'link')
-                                                {{-- {{ dd( $service->getLink($service->service_id)) }} --}}
-                                                     {{ $modelviewservice->where($service->service_id)->first() }}
-                                                @endif
-                                            </td>
+                                                <td>
+                                                    @if ($item1->type == 'text')
+                                                        {{ $item['value'] }}
+                                                    @elseif ($item1->type == 'link')
+                                                        {{-- {{ dd( $service->getLink($service->service_id)) }} --}}
+                                                        {{ $modelviewservice->where($service->service_id)->first() }}
+                                                    @endif
+                                                </td>
                                             @endif
                                         @endforeach
                                     @else
@@ -66,7 +70,7 @@
             @can('service_delete')
                 let deleteButtonTrans =
                     '{{ trans('
-                                                                                                                                                                                                                                                                                                                                                                        global.datatables.delete ') }}'
+                                                                                                                                                                                                                                                                                                                                                                                            global.datatables.delete ') }}'
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.services.massDestroy') }}",
@@ -81,7 +85,7 @@
                         if (ids.length === 0) {
                             alert(
                                 '{{ trans('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        global.datatables.zero_selected ') }}'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        global.datatables.zero_selected ') }}'
                             )
 
                             return
@@ -89,7 +93,7 @@
 
                         if (confirm(
                                 '{{ trans('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                global.areYouSure ') }}'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                global.areYouSure ') }}'
                             )) {
                             $.ajax({
                                     headers: {

@@ -15,29 +15,33 @@
                         <div class="form-group">
                             <label for="name">{{ $item->value }}</label>
                             <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text"
-                                name="input-{{ $item->id }}" id="input-{{ $item->id }}"
-                                value="">
+                                name="input-{{ $item->id }}" id="input-{{ $item->id }}" value="">
                         </div>
-                    @endif
-                    {{-- @if ($item->type == 'select')
+                    @elseif ($item->type == 'number')
                         <div class="form-group">
-                            <label class="required" for="service_id">{{ trans('cruds.viewService.fields.service') }}</label>
+                            <label for="name">{{ $item->value }}</label>
+                            <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="number"
+                                name="input-{{ $item->id }}" id="input-{{ $item->id }}" value="">
+                        </div>
+                    @elseif ($item->type == 'select')
+                        <div class="form-group">
+                            <label for="name">{{ $item->value }}</label>
                             <select class="form-control select2 {{ $errors->has('service') ? 'is-invalid' : '' }}"
                                 name="input-{{ $item->id }}" id="service_id" required>
                                 @foreach ($item->selecttype as $item2)
-                                    <option value="{{ $item2['id'] }}"> {{ $item2['name'] }}</option>
+                                    <option value="{{ $item2['id'] }}"> {{ $item2['value'] }}</option>
                                 @endforeach
                             </select>
-
                         </div>
-                    @endif --}}
+                    @endif
+
                     {{-- @if ($item->type == 'image')
-            <div class="form-group">
-                <label for="name">{{ $item->value }}</label>
-                <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text"
-                    name="input-{{  $item->id }}" id="input-{{  $item->id }}" value="{{ old('name', '') }}">
-            </div>
-            @endif --}}
+                        <div class="form-group">
+                            <label for="name">{{ $item->value }}</label>
+                            <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text"
+                                name="input-{{  $item->id }}" id="input-{{  $item->id }}" value="{{ old('name', '') }}">
+                        </div>
+                        @endif --}}
                 @endforeach
 
                 <div class="form-group">
