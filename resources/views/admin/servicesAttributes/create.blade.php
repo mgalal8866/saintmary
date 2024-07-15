@@ -59,6 +59,17 @@
                     @endif
                     <span class="help-block">{{ trans('cruds.servicesAttribute.fields.type_helper') }}</span>
                 </div>
+                <div class="form-group">
+                    <label for="main">هل الحقل رئيسي</label>
+                    <select class="form-control select2 {{ $errors->has('service') ? 'is-invalid' : '' }}" name="main" id="main">
+                        <option value="0" selected >غير رئيسي</option>
+                            <option value="1"  >رئيسي</option>
+                    </select>
+                    @if ($errors->has('main'))
+                        <span class="text-danger">{{ $errors->first('main') }}</span>
+                    @endif
+
+                </div>
                 <div class="form-group" id="gservice" style="display: none;">
                     <label class="required">{{ trans('cruds.servicesAttribute.fields.table') }}</label>
                     <select class="form-control {{ $errors->has('linkservice') ? 'is-invalid' : '' }}" name="linkservice"

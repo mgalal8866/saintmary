@@ -40,13 +40,24 @@ class ServicesAttributeController extends Controller
             'service_id' => $request->service_id,
             'linkservice' => $request->linkservice,
         ];
-        // dd($request->selecttype);
-        if($request->has('selecttype')){
-        foreach ($request->selecttype as $index => $item) {
-            $var[] = ['id' => ($index + 1), 'value' => $item];
+
+        $servicesAttributecount = ServicesAttribute::where(['service_id' => $request->service_id])->get();
+        if ($servicesAttributecount->count() > 0) {
+            if ($request->main == 1) {
+                $servicesAttributecount->update(['main' => 0]);
+                $data['main'] =  $request->main ;
+            } else {
+                $data['main'] =  0;
+            }
+        } else {
+            $data['main'] =  1;
         }
-        $data['selecttype'] =  $var;
-    }
+        if ($request->has('selecttype')) {
+            foreach ($request->selecttype as $index => $item) {
+                $var[] = ['id' => ($index + 1), 'value' => $item];
+            }
+            $data['selecttype'] =  $var;
+        }
         $servicesAttribute = ServicesAttribute::create($data);
 
         return redirect()->route('admin.services-attributes.index');

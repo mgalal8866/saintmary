@@ -46,8 +46,8 @@ class ViewService extends Model
     //     return $this->where(['service_id'=>$link])->first() ;
     // }
 
-    public function service_attribute()
-    {
-        return $this->belongsTo(ServicesAttribute::class, 'service_attribute_id');
-    }
+    // public function service_attribute()
+    // {
+    //     return $this->belongsTo(ServicesAttribute::class, 'service_attribute_id');
+    // }
 }

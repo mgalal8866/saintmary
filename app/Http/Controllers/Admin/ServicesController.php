@@ -35,7 +35,6 @@ class ServicesController extends Controller
     public function viewservice($id)
     {
         $modelservice = Service::with(['subservies', 'service_attribute'])->findOrFail($id);
-
         $modelviewservice = ViewService::where('service_id', $id)->get();
         abort_if(Gate::denies($modelservice->slug), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
@@ -45,7 +44,7 @@ class ServicesController extends Controller
     {
         $services_attribute = ServicesAttribute::where('service_id', $id)->get();
 
- 
+
         return view('admin.viewServices.create', compact(['services_attribute', 'id']));
     }
     public function save_parent_service(Request $request)
@@ -67,16 +66,23 @@ class ServicesController extends Controller
     }
     public function getSubservice(Request $request)
     {
-        // $service = Service::pluck('name', 'id');
         $service = ServicesAttribute::where('service_id', $request->service_id)->get(['id', 'value']);
+        return response()->json($service);
+    }
+    public function getuserby(Request $request)
+    {
+
+        $service = ViewService::where('service_id', $request->service_id)->with(['service.service_attribute' =>function($q){
+            $q->where('main','1');
+        }])->get();
         return response()->json($service);
     }
     public function store(StoreServiceRequest $request)
     {
-
         $slug = Str::slug($request->name);
         $originalSlug = $slug;
         $counter = 1;
+
         // Check if the slug already exists and generate a new one if necessary
         while (Service::where('slug', $slug)->exists()) {
             $slug = $originalSlug . '-' . $counter++;
@@ -130,7 +136,6 @@ class ServicesController extends Controller
     public function massDestroy(MassDestroyServiceRequest $request)
     {
         $services = Service::find(request('ids'));
-
         foreach ($services as $service) {
             $service->delete();
         }

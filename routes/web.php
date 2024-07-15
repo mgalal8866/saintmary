@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/get-subservice', [ServicesController::class, 'getSubservice'])->name('getSubservice');
+Route::get('/get-userby', [ServicesController::class, 'getuserby'])->name('getuserby');
 
 Route::redirect('/', '/login');
 Route::get('/home', function () {
@@ -28,7 +29,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
       Route::post('imgs/media', 'ImgController@storeMedia')->name('imgs.storeMedia');
       Route::post('imgs/ckmedia', 'ImgController@storeCKEditorImages')->name('imgs.storeCKEditorImages');
       Route::resource('imgs', 'ImgController');
-      
+
     // Permissions
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
     Route::resource('permissions', 'PermissionsController');
