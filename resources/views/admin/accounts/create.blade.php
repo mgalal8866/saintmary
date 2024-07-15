@@ -22,6 +22,18 @@
                 <span class="help-block">{{ trans('cruds.account.fields.service_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="service_id">{{ trans('cruds.account.fields.service') }}</label>
+                <select class="form-control select2 {{ $errors->has('service') ? 'is-invalid' : '' }}" name="service_id" id="service_id">
+                    @foreach($services as $id => $entry)
+                        <option value="{{ $id }}" {{ old('service_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('service'))
+                    <span class="text-danger">{{ $errors->first('service') }}</span>
+                @endif
+                <span class="help-block">{{ trans('cruds.account.fields.service_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label class="required" for="value">{{ trans('cruds.account.fields.value') }}</label>
                 <input class="form-control {{ $errors->has('value') ? 'is-invalid' : '' }}" type="number" name="value" id="value" value="{{ old('value', '0') }}" step="0.01" required>
                 @if($errors->has('value'))
@@ -53,4 +65,59 @@
 
 
 
+@endsection
+@section('scripts')
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $(".select2").select2({
+                tags: true
+
+            });
+            $('#type').change(function() {
+                var key = $(this).val();
+                if (key == 'link') {
+                    const serviceSelect = document.getElementById('service_id');
+
+
+                    $('#gservice').show();
+                    $.ajax({
+                        url: '{{ route('getSubservice') }}',
+                        type: 'GET',
+                        data: {
+                            service_id: serviceSelect.value
+                        },
+                        dataType: 'json',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            $('#linkservice').empty();
+                            $('#linkservice').append(
+                                '<option value="">{{ trans('global.pleaseSelect') }}</option>'
+                            );
+                            $.each(data, function(index, item) {
+                                $('#linkservice').append('<option value="' + item.id +
+                                    '">' + item.value + '</option>');
+                            });
+                        }
+                    });
+                    $('#selecttypediv').attr('style', 'display: none;');
+                } else if (key == 'select') {
+                    // console.log('select')
+                    $('#gservice').hide();
+                    $('#selecttypediv').attr('style', 'display: block;');
+
+                } else {
+                    $('#selecttypediv').attr('style', 'display: none;');
+
+                    $('#linkservice').empty();
+                    $('#linkservice').append(
+                        '<option value="">{{ trans('global.pleaseSelect') }}</option>');
+                    $('#gservice').hide();
+                }
+            });
+        });
+    </script>
 @endsection

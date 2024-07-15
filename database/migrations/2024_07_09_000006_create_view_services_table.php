@@ -11,6 +11,7 @@ class CreateViewServicesTable extends Migration
         Schema::create('view_services', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->nullable();
+            $table->json('data')->nullable();
             $table->timestamps();
         });
     }

@@ -36,6 +36,7 @@ class ViewServiceController extends Controller
 
     public function store(StoreViewServiceRequest $request)
     {
+
         $viewService = ViewService::create($request->all());
 
         return redirect()->route('admin.view-services.index');
@@ -66,7 +67,7 @@ class ViewServiceController extends Controller
         abort_if(Gate::denies('view_service_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $viewService->load('service', 'service_attribute');
-
+        dd(       $viewService  )   ;
         return view('admin.viewServices.show', compact('viewService'));
     }
 }

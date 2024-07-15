@@ -36,28 +36,34 @@
                             <tr>
                                 @foreach ($modelservice->service_attribute as $item1)
                                     @if (is_array($service->data))
-                                        {{-- @foreach ($service->data as $item) --}}
-                                        {{-- @if ($item1->id == $item['id']) --}}
-                                        {{-- {{    json_encode($service->data)}} --}}
                                         @php
-                                        $it = json_encode($service->data);
-                                        $data = collect(json_decode($it, true));
-                                        $exists = $data->contains('id', $item1->id);
-                                        $item = $data->firstWhere('id',$item1->id);
+                                            $it = json_encode($service->data);
+                                            $data = collect(json_decode($it, true));
+                                            $exists = $data->contains('id', $item1->id);
+                                            $item = $data->firstWhere('id', $item1->id);
                                         @endphp
 
                                         @if ($exists)
                                             <td>
                                                 @if ($item1->type == 'text')
-                                                   {{$it[ $item] }}
-                                                @elseif ($item1->type == 'link')
-                                                      {{ $item['value'] }}
-                                                    {{-- {{ $modelviewservice->where($service->service_id)->first() }} --}}
-                                                @elseif ($item1->type == 'select')
                                                     {{ $item['value'] }}
+                                                @elseif ($item1->type == 'link')
+                                                    @php
+                                                        $viewService = App\Models\ViewService::where([
+                                                            'id' => $item['value'],
+                                                            'service_id' => $modelservice->service_id,
+                                                        ])->first();
+                                                    @endphp
+
+                                                    {{ collect($viewService->data)->firstWhere('id', $item1->linkservice)['value'] }}
+                                                @elseif ($item1->type == 'select')
+                                                    @php
+                                                        $itselect = json_encode($item1['selecttype']);
+                                                        $data_select = collect(json_decode($itselect, true));
+                                                        $itemselect = $data_select->firstWhere('id', $item['value']);
+                                                    @endphp
+                                                    {{ $data_select->firstWhere('id', $item['value'])['value'] }}
                                                 @elseif ($item1->type == 'number')
-                                                      {{ $item['value'] }}
-                                                @elseif ($item1->type == 'image')
                                                     {{ $item['value'] }}
                                                 @endif
                                             </td>
@@ -86,7 +92,7 @@
             @can('service_delete')
                 let deleteButtonTrans =
                     '{{ trans('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        global.datatables.delete ') }}'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    global.datatables.delete ') }}'
                 let deleteButton = {
                     text: deleteButtonTrans,
                     url: "{{ route('admin.services.massDestroy') }}",
@@ -101,7 +107,7 @@
                         if (ids.length === 0) {
                             alert(
                                 '{{ trans('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        global.datatables.zero_selected ') }}'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        global.datatables.zero_selected ') }}'
                             )
 
                             return
@@ -109,7 +115,7 @@
 
                         if (confirm(
                                 '{{ trans('
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                global.areYouSure ') }}'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                global.areYouSure ') }}'
                             )) {
                             $.ajax({
                                     headers: {

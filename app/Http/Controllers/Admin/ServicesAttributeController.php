@@ -41,10 +41,12 @@ class ServicesAttributeController extends Controller
             'linkservice' => $request->linkservice,
         ];
         // dd($request->selecttype);
+        if($request->has('selecttype')){
         foreach ($request->selecttype as $index => $item) {
             $var[] = ['id' => ($index + 1), 'value' => $item];
         }
         $data['selecttype'] =  $var;
+    }
         $servicesAttribute = ServicesAttribute::create($data);
 
         return redirect()->route('admin.services-attributes.index');

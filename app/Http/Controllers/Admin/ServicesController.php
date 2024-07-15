@@ -45,7 +45,7 @@ class ServicesController extends Controller
     {
         $services_attribute = ServicesAttribute::where('service_id', $id)->get();
 
-
+ 
         return view('admin.viewServices.create', compact(['services_attribute', 'id']));
     }
     public function save_parent_service(Request $request)
@@ -73,6 +73,7 @@ class ServicesController extends Controller
     }
     public function store(StoreServiceRequest $request)
     {
+
         $slug = Str::slug($request->name);
         $originalSlug = $slug;
         $counter = 1;

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Service;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,7 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        view()->share('servicemodel',     Service::get());
+        if (Schema::hasTable('services')) {
+            view()->share('servicemodel', Service::get());
+        } else {
+            // Handle the case where the table doesn't exist, e.g., log an error or provide a default value
+            view()->share('servicemodel', collect());
+        }
 
     }
 }
