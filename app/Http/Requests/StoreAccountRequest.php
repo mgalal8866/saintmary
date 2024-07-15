@@ -23,6 +23,12 @@ class StoreAccountRequest extends FormRequest
             'type' => [
                 'required',
             ],
+            'service_att' => [
+                'required',
+            ],
+            'service_id' => [
+                'required',
+            ],
         ];
     }
 }

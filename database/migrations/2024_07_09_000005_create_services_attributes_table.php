@@ -12,9 +12,10 @@ class CreateServicesAttributesTable extends Migration
             $table->bigIncrements('id');
             $table->string('value');
             $table->string('type');
-        
+
             $table->string('linkservice')->nullable();
             $table->json('selecttype')->nullable();
+            $table->boolean('main')->default(0)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

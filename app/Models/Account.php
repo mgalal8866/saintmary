@@ -25,6 +25,7 @@ class Account extends Model
     ];
 
     protected $fillable = [
+        'service_att',
         'service_id',
         'value',
         'type',

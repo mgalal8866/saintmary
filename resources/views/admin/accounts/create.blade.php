@@ -9,7 +9,7 @@
             <form method="POST" action="{{ route('admin.accounts.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
-                    <label for="service_id">{{ trans('cruds.account.fields.service') }}</label>
+                    <label  class="required" for="service_id">{{ trans('cruds.account.fields.service') }}</label>
                     <select class="form-control select2 {{ $errors->has('service') ? 'is-invalid' : '' }}" name="service_id"
                         id="service_id" required>
                         @foreach ($services as $id => $entry)
@@ -24,8 +24,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="useby">المستفيد</label>
-                    <select class="form-control select2 {{ $errors->has('service') ? 'is-invalid' : '' }}" name="useby" id="useby" required>
+                    <label  class="required" for="service_att">المستفيد</label>
+                    <select class="form-control select2 {{ $errors->has('service') ? 'is-invalid' : '' }}" name="service_att"
+                        id="service_att" required>
 
                     </select>
                     @if ($errors->has('service'))
@@ -88,12 +89,19 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(data) {
-                        $('#useby').empty();
-                        $('#useby').append('<option value="">{{ trans('global.pleaseSelect') }}</option>');
+                        $('#service_att').empty();
+                        $('#service_att').append(
+                            '<option value="">{{ trans('global.pleaseSelect') }}</option>');
                         $.each(data, function(index, item) {
-                            console.log(item['data']);
-                            console.log(item['service']['service_attribute']);
-                            $('#useby').append('<option value="' + item.id + '">' + item.value + '</option>');
+                            const serviceAttributeId = item['service']['service_attribute'][0]['id'];
+                            const dataarray = item['data'];
+                            const specificItem = dataarray.find(dataItem => {
+                                return dataItem.id.toString() ===serviceAttributeId.toString();
+                            });
+
+                            if (specificItem) {
+                                $('#service_att').append('<option value="' + item['id'] +'">' + specificItem.value + '</option>');
+                            }
                         });
                     }
                 });

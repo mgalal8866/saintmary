@@ -12,6 +12,8 @@ class CreateAccountsTable extends Migration
             $table->bigIncrements('id');
             $table->decimal('value', 15, 2);
             $table->string('type');
+            $table->integer('service_id')->nullable();
+            $table->integer('service_att')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

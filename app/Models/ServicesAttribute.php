@@ -34,11 +34,11 @@ class ServicesAttribute extends Model
     ];
 
     public const TYPE_SELECT = [
-        'image'  => 'image',
+        // 'image'  => 'image',
         'text'   => 'text',
         'number' => 'number',
         'select' => 'select',
-        'link' => 'link',
+        // 'link' => 'link',
     ];
 
     protected function serializeDate(DateTimeInterface $date)
