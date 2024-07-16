@@ -50,4 +50,5 @@ class ServicesAttribute extends Model
     {
         return $this->belongsTo(Service::class, 'service_id');
     }
+
 }

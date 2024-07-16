@@ -14,13 +14,22 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AccountsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         abort_if(Gate::denies('account_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $accounts = Account::with(['service'])->get();
+        $accounts = Account::with('service'); // Initialize the query with the relationship loaded
 
-        return view('admin.accounts.index', compact('accounts'));
+        if ($request->has('service_id')) {
+            $accounts->where('service_id', $request->service_id); // Apply the filter if 'service_id' is present
+        }
+        if ($request->has('fromdata') &&$request->has('todata') ) {
+            $accounts->whereBetween('created_at', [$request->fromdata, $request->todata]); // Apply the filter if 'service_id' is present
+        }
+
+        $accounts = $accounts->get(); // Retrieve the accounts
+        $services = Service::get();
+        return view('admin.accounts.index', compact('accounts', 'services'));
     }
 
     public function create()

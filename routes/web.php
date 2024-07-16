@@ -24,11 +24,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('/', 'HomeController@index')->name('home');
 
 
-      // Img
-      Route::delete('imgs/destroy', 'ImgController@massDestroy')->name('imgs.massDestroy');
-      Route::post('imgs/media', 'ImgController@storeMedia')->name('imgs.storeMedia');
-      Route::post('imgs/ckmedia', 'ImgController@storeCKEditorImages')->name('imgs.storeCKEditorImages');
-      Route::resource('imgs', 'ImgController');
+    // Img
+    Route::delete('imgs/destroy', 'ImgController@massDestroy')->name('imgs.massDestroy');
+    Route::post('imgs/media', 'ImgController@storeMedia')->name('imgs.storeMedia');
+    Route::post('imgs/ckmedia', 'ImgController@storeCKEditorImages')->name('imgs.storeCKEditorImages');
+    Route::resource('imgs', 'ImgController');
 
     // Permissions
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
