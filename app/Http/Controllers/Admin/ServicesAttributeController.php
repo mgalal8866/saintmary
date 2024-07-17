@@ -42,14 +42,18 @@ class ServicesAttributeController extends Controller
         ];
 
         $servicesAttributecount = ServicesAttribute::where(['service_id' => $request->service_id])->get();
+        
         if ($servicesAttributecount->count() > 0) {
+
             if ($request->main == 1) {
-                $servicesAttributecount->update(['main' => 0]);
-                $data['main'] =  $request->main ;
+                ServicesAttribute::where(['service_id' => $request->service_id])->update(['main' => 0]);
+
+                $data['main'] =  1 ;
             } else {
                 $data['main'] =  0;
             }
         } else {
+
             $data['main'] =  1;
         }
         if ($request->has('selecttype')) {
@@ -58,9 +62,10 @@ class ServicesAttributeController extends Controller
             }
             $data['selecttype'] =  $var;
         }
+
         $servicesAttribute = ServicesAttribute::create($data);
 
-        return redirect()->route('admin.services-attributes.index');
+        // return redirect()->route('admin.services-attributes.index');
     }
 
     public function edit(ServicesAttribute $servicesAttribute)

@@ -13,6 +13,7 @@
 
                     <select class="form-control select2 {{ $errors->has('service') ? 'is-invalid' : '' }}" name="service_id"
                         id="service_id" required>
+                        <option value="" >اختار</option>
                         @foreach ($services as $id => $entry)
                             @can($entry->slug)
                                 <option value="{{ $entry->id }}" {{ old('service_id') == $entry->id ? 'selected' : '' }}>
@@ -92,6 +93,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(data) {
+                        console.log(data);
                         $('#service_att').empty();
                         $('#service_att').append(
                             '<option value="">{{ trans('global.pleaseSelect') }}</option>');

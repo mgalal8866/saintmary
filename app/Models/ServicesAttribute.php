@@ -26,6 +26,7 @@ class ServicesAttribute extends Model
         'service_id',
         'value',
         'type',
+        'main',
         'linkservice',
         'selecttype',
         'created_at',
