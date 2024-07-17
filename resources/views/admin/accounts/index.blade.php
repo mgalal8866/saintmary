@@ -108,6 +108,9 @@
                                 {{ trans('cruds.account.fields.type') }}
                             </th>
                             <th>
+                                بيان
+                            </th>
+                            <th>
                                 &nbsp;
                             </th>
                         </tr>
@@ -145,8 +148,12 @@
                                 <td>
                                     {{ $account->value ?? '' }}
                                 </td>
+
                                 <td>
                                     {{ App\Models\Account::TYPE_SELECT[$account->type] ?? '' }}
+                                </td>
+                                <td>
+                                    {{ $account->comment ?? '' }}
                                 </td>
                                 <td>
                                     @can('account_show')

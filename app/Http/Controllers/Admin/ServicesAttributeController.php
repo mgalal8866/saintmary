@@ -42,7 +42,7 @@ class ServicesAttributeController extends Controller
         ];
 
         $servicesAttributecount = ServicesAttribute::where(['service_id' => $request->service_id])->get();
-        
+
         if ($servicesAttributecount->count() > 0) {
 
             if ($request->main == 1) {
@@ -65,7 +65,7 @@ class ServicesAttributeController extends Controller
 
         $servicesAttribute = ServicesAttribute::create($data);
 
-        // return redirect()->route('admin.services-attributes.index');
+        return redirect()->route('admin.services-attributes.index');
     }
 
     public function edit(ServicesAttribute $servicesAttribute)
