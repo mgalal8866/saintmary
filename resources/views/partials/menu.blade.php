@@ -12,7 +12,8 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs("admin.home") ? "active" : "" }}" href="{{ route("admin.home") }}">
+                    <a class="nav-link {{ request()->routeIs('admin.home') ? 'active' : '' }}"
+                        href="{{ route('admin.home') }}">
                         <i class="fas fa-fw fa-tachometer-alt nav-icon">
                         </i>
                         <p>
@@ -21,39 +22,55 @@
                     </a>
 
                 </li>
-                @foreach ($servicemodel as $item )
-                {{-- <li class="nav-item has-treeview {{ request()->is("admin/permissions*") ? "menu-open" : "" }} {{ request()->is("admin/roles*") ? "menu-open" : "" }} {{ request()->is("admin/users*") ? "menu-open" : "" }}">
-                    <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/permissions*") ? "active" : "" }} {{ request()->is("admin/roles*") ? "active" : "" }} {{ request()->is("admin/users*") ? "active" : "" }}" href="#">
-                        <i class="fa-fw nav-icon fas fa-cogs">
 
-                        </i>
-                        <p>
-                            {{ trans('cruds.userManagement.title') }}
-                            <i class="right fa fa-fw fa-angle-left nav-icon"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview"> --}}
+    
 
-                        @can($item->slug)
-                        <li class="nav-item">
-                            <a href="{{ route('admin.service.view',['id'=>$item->id]) }}" class="nav-link"  >
-                                <p>
-                                    <i class="fa-fw nav-icon fas fa-cogs">
+                @foreach ($categorymodel as $item3)
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/permissions*') ? 'menu-open' : '' }} {{ request()->is('admin/roles*') ? 'menu-open' : '' }} {{ request()->is('admin/users*') ? 'menu-open' : '' }}">
+                        <a class="nav-link nav-dropdown-toggle {{ request()->is('admin/permissions*') ? 'active' : '' }} {{ request()->is('admin/roles*') ? 'active' : '' }} {{ request()->is('admin/users*') ? 'active' : '' }}"
+                            href="#">
+                            <i class="fa-fw nav-icon fas fa-cogs">
 
-                                    </i>
-                                    <p>  {{ $item->name }}  </p>
-                                </p>
-                            </a>
-                        </li>
-                        @endcan
-                    {{-- </ul>
-                </li> --}}
+                            </i>
+                            <p>
+                                {{ $item3->name }}
+                                <i class="right fa fa-fw fa-angle-left nav-icon"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            @foreach ($item3->service as $item11)
+                                @can($item11->slug)
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.service.view', ['id' => $item11->id]) }}" class="nav-link   {{ request()->is('admin/service')   ? 'active' : '' }}">
+                                            <i class="fa-fw nav-icon fas fa-cogs">
 
-
+                                            </i>
+                                            <p>
+                                                {{ $item11->name }}
+                                            </p>
+                                        </a>
+                                    </li>
+                                @endcan
+                            @endforeach
+                        </ul>
+                    </li>
                 @endforeach
+
+
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.category.') ? 'active' : '' }}"  href="{{ route('admin.category.index') }}">
+                        <i class="fas fa-fw fa-tachometer-alt nav-icon">
+                        </i>
+                        <p> اقسام القائمة </p>
+                    </a>
+                </li>
+
                 @can('user_management_access')
-                    <li class="nav-item has-treeview {{ request()->is("admin/permissions*") ? "menu-open" : "" }} {{ request()->is("admin/roles*") ? "menu-open" : "" }} {{ request()->is("admin/users*") ? "menu-open" : "" }}">
-                        <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/permissions*") ? "active" : "" }} {{ request()->is("admin/roles*") ? "active" : "" }} {{ request()->is("admin/users*") ? "active" : "" }}" href="#">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/permissions*') ? 'menu-open' : '' }} {{ request()->is('admin/roles*') ? 'menu-open' : '' }} {{ request()->is('admin/users*') ? 'menu-open' : '' }}">
+                        <a class="nav-link nav-dropdown-toggle {{ request()->is('admin/permissions*') ? 'active' : '' }} {{ request()->is('admin/roles*') ? 'active' : '' }} {{ request()->is('admin/users*') ? 'active' : '' }}"
+                            href="#">
                             <i class="fa-fw nav-icon fas fa-users">
 
                             </i>
@@ -65,7 +82,8 @@
                         <ul class="nav nav-treeview">
                             @can('permission_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.permissions.index") }}" class="nav-link {{ request()->is("admin/permissions") || request()->is("admin/permissions/*") ? "active" : "" }}">
+                                    <a href="{{ route('admin.permissions.index') }}"
+                                        class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
                                         <i class="fa-fw nav-icon fas fa-unlock-alt">
 
                                         </i>
@@ -77,7 +95,8 @@
                             @endcan
                             @can('role_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.roles.index") }}" class="nav-link {{ request()->is("admin/roles") || request()->is("admin/roles/*") ? "active" : "" }}">
+                                    <a href="{{ route('admin.roles.index') }}"
+                                        class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
                                         <i class="fa-fw nav-icon fas fa-briefcase">
 
                                         </i>
@@ -89,7 +108,8 @@
                             @endcan
                             @can('user_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.users.index") }}" class="nav-link {{ request()->is("admin/users") || request()->is("admin/users/*") ? "active" : "" }}">
+                                    <a href="{{ route('admin.users.index') }}"
+                                        class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
                                         <i class="fa-fw nav-icon fas fa-user">
 
                                         </i>
@@ -103,8 +123,10 @@
                     </li>
                 @endcan
                 @can('management_service_access')
-                    <li class="nav-item has-treeview {{ request()->is("admin/services*") ? "menu-open" : "" }} {{ request()->is("admin/services-attributes*") ? "menu-open" : "" }} {{ request()->is("admin/view-services*") ? "menu-open" : "" }}">
-                        <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/services*") ? "active" : "" }} {{ request()->is("admin/services-attributes*") ? "active" : "" }} {{ request()->is("admin/view-services*") ? "active" : "" }}" href="#">
+                    <li
+                        class="nav-item has-treeview {{ request()->is('admin/services*') ? 'menu-open' : '' }} {{ request()->is('admin/services-attributes*') ? 'menu-open' : '' }} {{ request()->is('admin/view-services*') ? 'menu-open' : '' }}">
+                        <a class="nav-link nav-dropdown-toggle {{ request()->is('admin/services*') ? 'active' : '' }} {{ request()->is('admin/services-attributes*') ? 'active' : '' }} {{ request()->is('admin/view-services*') ? 'active' : '' }}"
+                            href="#">
                             <i class="fa-fw nav-icon fas fa-server">
 
                             </i>
@@ -116,7 +138,8 @@
                         <ul class="nav nav-treeview">
                             @can('service_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.services.index") }}" class="nav-link {{ request()->is("admin/services") || request()->is("admin/services/*") ? "active" : "" }}">
+                                    <a href="{{ route('admin.services.index') }}"
+                                        class="nav-link {{ request()->is('admin/services') || request()->is('admin/services/*') ? 'active' : '' }}">
                                         <i class="fa-fw nav-icon fas fa-align-justify">
 
                                         </i>
@@ -128,7 +151,8 @@
                             @endcan
                             @can('services_attribute_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.services-attributes.index") }}" class="nav-link {{ request()->is("admin/services-attributes") || request()->is("admin/services-attributes/*") ? "active" : "" }}">
+                                    <a href="{{ route('admin.services-attributes.index') }}"
+                                        class="nav-link {{ request()->is('admin/services-attributes') || request()->is('admin/services-attributes/*') ? 'active' : '' }}">
                                         <i class="fa-fw nav-icon fas fa-angle-double-right">
 
                                         </i>
@@ -154,8 +178,9 @@
                     </li>
                 @endcan
                 @can('management_account_access')
-                    <li class="nav-item has-treeview {{ request()->is("admin/accounts*") ? "menu-open" : "" }}">
-                        <a class="nav-link nav-dropdown-toggle {{ request()->is("admin/accounts*") ? "active" : "" }}" href="#">
+                    <li class="nav-item has-treeview {{ request()->is('admin/accounts*') ? 'menu-open' : '' }}">
+                        <a class="nav-link nav-dropdown-toggle {{ request()->is('admin/accounts*') ? 'active' : '' }}"
+                            href="#">
                             <i class="fa-fw nav-icon fas fa-cogs">
 
                             </i>
@@ -167,7 +192,8 @@
                         <ul class="nav nav-treeview">
                             @can('account_access')
                                 <li class="nav-item">
-                                    <a href="{{ route("admin.accounts.index") }}" class="nav-link {{ request()->is("admin/accounts") || request()->is("admin/accounts/*") ? "active" : "" }}">
+                                    <a href="{{ route('admin.accounts.index') }}"
+                                        class="nav-link {{ request()->is('admin/accounts') || request()->is('admin/accounts/*') ? 'active' : '' }}">
                                         <i class="fa-fw nav-icon fas fa-hand-holding-usd">
 
                                         </i>
@@ -180,10 +206,11 @@
                         </ul>
                     </li>
                 @endcan
-                @if(file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))
+                @if (file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))
                     @can('profile_password_edit')
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->is('profile/password') || request()->is('profile/password/*') ? 'active' : '' }}" href="{{ route('profile.password.edit') }}">
+                            <a class="nav-link {{ request()->is('profile/password') || request()->is('profile/password/*') ? 'active' : '' }}"
+                                href="{{ route('profile.password.edit') }}">
                                 <i class="fa-fw fas fa-key nav-icon">
                                 </i>
                                 <p>
@@ -194,7 +221,8 @@
                     @endcan
                 @endif
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
+                    <a href="#" class="nav-link"
+                        onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                         <p>
                             <i class="fas fa-fw fa-sign-out-alt nav-icon">
 

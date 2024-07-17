@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use DateTimeInterface;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Service extends Model
 {
@@ -24,6 +25,7 @@ class Service extends Model
         'slug',
         'service_id',
         'subservies_id',
+        'category_id',
         'mainservice',
         'created_at',
         'updated_at',
@@ -40,9 +42,9 @@ class Service extends Model
         return $this->belongsTo(self::class, 'service_id');
     }
 
-    public function subservies()
+    public function category()
     {
-        return $this->belongsTo(self::class, 'subservies_id');
+        return $this->belongsTo(Category::class, 'category_id');
     }
     public function service_attribute()
     {

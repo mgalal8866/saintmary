@@ -18,6 +18,20 @@
                     <span class="help-block">{{ trans('cruds.service.fields.name_helper') }}</span>
                 </div>
                 <div class="form-group">
+                    <label for="category_id">تصنيف القائمه</label>
+                    <select class="form-control select2 {{ $errors->has('service') ? 'is-invalid' : '' }}" name="category_id"
+                        id="category_id" required>
+                        @foreach ($category as $id => $entry)
+                            <option value="{{ $id }}" {{ old('category_id') == $id ? 'selected' : '' }}>
+                                {{ $entry }}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('service'))
+                        <span class="text-danger">{{ $errors->first('service') }}</span>
+                    @endif
+                    <span class="help-block">{{ trans('cruds.service.fields.service_helper') }}</span>
+                </div>
+                <div class="form-group">
                     <label for="service_id">{{ trans('cruds.service.fields.service') }}</label>
                     <select class="form-control select2 {{ $errors->has('service') ? 'is-invalid' : '' }}" name="service_id"
                         id="service_id">

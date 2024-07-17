@@ -7,11 +7,11 @@ use Gate;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 
-class UpdateServiceRequest extends FormRequest
+class StorecategoryRequest extends FormRequest
 {
     public function authorize()
     {
-        return Gate::allows('service_edit');
+        return Gate::allows('service_create');
     }
 
     public function rules()
@@ -19,9 +19,6 @@ class UpdateServiceRequest extends FormRequest
         return [
             'name' => [
                 'string',
-                'required',
-            ],
-            'category_id' => [
                 'required',
             ],
         ];

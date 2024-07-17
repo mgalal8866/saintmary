@@ -50,6 +50,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('services-attributes/destroy', 'ServicesAttributeController@massDestroy')->name('services-attributes.massDestroy');
     Route::resource('services-attributes', 'ServicesAttributeController');
 
+    // category
+    Route::delete('category/destroy', 'CategoryController@massDestroy')->name('categorys.massDestroy');
+    Route::resource('category', 'CategoryController');
+
     // View Service
     Route::resource('view-services', 'ViewServiceController', ['except' => ['destroy']]);
     Route::get('service/{id}', 'ServicesController@viewservice')->name('service.view');

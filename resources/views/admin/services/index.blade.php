@@ -31,6 +31,9 @@
                          <th>
                             {{ trans('cruds.service.fields.service') }}
                         </th>
+                         <th>
+                           القسم
+                        </th>
                        {{-- <th>
                             {{ trans('cruds.service.fields.subservies') }}
                         </th> --}}
@@ -56,6 +59,9 @@
                             </td>
                            <td>
                                 {{ $service->service->name ?? '' }}
+                            </td>
+                           <td>
+                                {{ $service->category->name ?? '' }}
                             </td>
                              {{-- <td>
                                 {{ $service->subservies->name ?? '' }}

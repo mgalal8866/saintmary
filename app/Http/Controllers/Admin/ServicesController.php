@@ -15,13 +15,15 @@ use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Requests\MassDestroyServiceRequest;
+use App\Models\Category;
 
 class ServicesController extends Controller
 {
     public function index()
     {
         abort_if(Gate::denies('service_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $services = Service::with(['service', 'subservies'])->get();
+        $services = Service::get();
+
         return view('admin.services.index', compact('services'));
     }
 
@@ -29,12 +31,13 @@ class ServicesController extends Controller
     {
         abort_if(Gate::denies('service_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $services = Service::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-        $subservies = Service::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
-        return view('admin.services.create', compact('services', 'subservies'));
+
+        $category = Category::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        return view('admin.services.create', compact('services','category'));
     }
     public function viewservice($id)
     {
-        $modelservice = Service::with(['subservies', 'service_attribute'])->findOrFail($id);
+        $modelservice = Service::with(['service_attribute'])->findOrFail($id);
         $modelviewservice = ViewService::where('service_id', $id)->get();
         abort_if(Gate::denies($modelservice->slug), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
@@ -59,6 +62,7 @@ class ServicesController extends Controller
         // foreach ($data as $entry) {
         ViewService::create([
             'service_id' => $request->service_id,
+
             'data'      => $data
         ]);
         // }
@@ -89,6 +93,7 @@ class ServicesController extends Controller
         }
         $data = $request->all();
         $data['slug'] = $slug;
+        // $data['category_id'] = $slug;
         Permission::create(['title' => $data['slug']]);
         $service = Service::create($data);
 
@@ -100,12 +105,13 @@ class ServicesController extends Controller
         abort_if(Gate::denies('service_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $services = Service::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $category = Category::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $subservies = Service::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $service->load('service', 'subservies');
+        $service->load('service');
 
-        return view('admin.services.edit', compact('service', 'services', 'subservies'));
+        return view('admin.services.edit', compact('service', 'services','category'));
     }
 
     public function update(UpdateServiceRequest $request, Service $service)
@@ -119,7 +125,7 @@ class ServicesController extends Controller
     {
         abort_if(Gate::denies('service_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $service->load('service', 'subservies');
+        $service->load('service');
 
         return view('admin.services.show', compact('service'));
     }
