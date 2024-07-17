@@ -29,6 +29,9 @@ class StoreAccountRequest extends FormRequest
             'service_id' => [
                 'required',
             ],
+            'comment' => [
+                'required',
+            ],
         ];
     }
 }

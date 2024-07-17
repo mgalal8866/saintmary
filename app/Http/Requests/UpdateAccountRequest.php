@@ -23,6 +23,9 @@ class UpdateAccountRequest extends FormRequest
             'type' => [
                 'required',
             ],
+            'comment' => [
+                'required',
+            ],
         ];
     }
 }
