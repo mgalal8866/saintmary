@@ -9,12 +9,15 @@
             <form method="POST" action="{{ route('admin.accounts.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
-                    <label  class="required" for="service_id">{{ trans('cruds.account.fields.service') }}</label>
+                    <label class="required" for="service_id">{{ trans('cruds.account.fields.service') }}</label>
+
                     <select class="form-control select2 {{ $errors->has('service') ? 'is-invalid' : '' }}" name="service_id"
                         id="service_id" required>
                         @foreach ($services as $id => $entry)
-                            <option value="{{ $id }}" {{ old('service_id') == $id ? 'selected' : '' }}>
-                                {{ $entry }}</option>
+                            @can($entry->slug)
+                                <option value="{{ $entry->id }}" {{ old('service_id') == $entry->id ? 'selected' : '' }}>
+                                    {{ $entry->name }}</option>
+                            @endcan
                         @endforeach
                     </select>
                     @if ($errors->has('service'))
@@ -24,9 +27,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label  class="required" for="service_att">المستفيد</label>
-                    <select class="form-control select2 {{ $errors->has('service') ? 'is-invalid' : '' }}" name="service_att"
-                        id="service_att" required>
+                    <label class="required" for="service_att">المستفيد</label>
+                    <select class="form-control select2 {{ $errors->has('service') ? 'is-invalid' : '' }}"
+                        name="service_att" id="service_att" required>
 
                     </select>
                     @if ($errors->has('service'))
@@ -93,14 +96,18 @@
                         $('#service_att').append(
                             '<option value="">{{ trans('global.pleaseSelect') }}</option>');
                         $.each(data, function(index, item) {
-                            const serviceAttributeId = item['service']['service_attribute'][0]['id'];
+                            const serviceAttributeId = item['service'][
+                                'service_attribute'
+                            ][0]['id'];
                             const dataarray = item['data'];
                             const specificItem = dataarray.find(dataItem => {
-                                return dataItem.id.toString() ===serviceAttributeId.toString();
+                                return dataItem.id.toString() ===
+                                    serviceAttributeId.toString();
                             });
 
                             if (specificItem) {
-                                $('#service_att').append('<option value="' + item['id'] +'">' + specificItem.value + '</option>');
+                                $('#service_att').append('<option value="' + item[
+                                    'id'] + '">' + specificItem.value + '</option>');
                             }
                         });
                     }

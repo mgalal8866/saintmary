@@ -40,7 +40,11 @@
                                     <select id="serviceSelect" name="service_id" class="form-control">
                                         <option value="">جميع الخدمات</option>
                                         @foreach ($services as $item)
-                                            <option value="{{ $item->id }}" {{  ( request()->get('service_id') == $item->id) ?  'selected':''}}>{{ $item->name }}</option>
+                                            @can($item->slug)
+                                                <option value="{{ $item->id }}"
+                                                    {{ request()->get('service_id') == $item->id ? 'selected' : '' }}>
+                                                    {{ $item->name }}</option>
+                                            @endcan
                                         @endforeach
                                     </select>
                                     @if ($errors->has('service'))
@@ -55,7 +59,8 @@
                                 <div class="form-group">
                                     <label for="data">من</label>
                                     <input class="form-control date {{ $errors->has('data') ? 'is-invalid' : '' }}"
-                                        type="text" name="fromdata" id="data" value="{{ request()->get('fromdata')}}">
+                                        type="text" name="fromdata" id="data"
+                                        value="{{ request()->get('fromdata') }}">
 
                                 </div>
                             </div>
@@ -63,7 +68,8 @@
                                 <div class="form-group">
                                     <label for="data">الى</label>
                                     <input class="form-control date {{ $errors->has('data') ? 'is-invalid' : '' }}"
-                                        type="text" name="todata" id="data" value="{{ request()->get('todata')}}">
+                                        type="text" name="todata" id="data"
+                                        value="{{ request()->get('todata') }}">
                                     @if ($errors->has('data'))
                                         <span class="text-danger">{{ $errors->first('data') }}</span>
                                     @endif

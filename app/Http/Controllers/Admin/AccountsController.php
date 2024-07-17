@@ -36,7 +36,7 @@ class AccountsController extends Controller
     {
         abort_if(Gate::denies('account_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $services = Service::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $services = Service::get();
 
         return view('admin.accounts.create', compact('services'));
     }
